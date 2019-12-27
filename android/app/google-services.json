@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "809436504900",
+    "firebase_url": "https://redditapp-69492.firebaseio.com",
+    "project_id": "redditapp-69492",
+    "storage_bucket": "redditapp-69492.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809436504900:android:e825490b0c0cd83e10ad11",
+        "android_client_info": {
+          "package_name": "com.example.redditapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809436504900-94leidq1squc5huqvgkuk1lrp56d6nu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfiNDsUpHLhjE7nKH6U3ufpLEF6rmalCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809436504900-94leidq1squc5huqvgkuk1lrp56d6nu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
