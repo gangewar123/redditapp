@@ -18,4 +18,4 @@ samples, guidance on mobile development, and a full API reference.
 ### Building and installing the Flutter app
 
 * `flutter pub get`
-* `flutter run --release`
+* `flutter run`
