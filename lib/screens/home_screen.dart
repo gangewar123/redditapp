@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: new BoxDecoration(
                 color: Colors.blue[800],
               ),
-              currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(userImage ?? '')),
+              currentAccountPicture:
+                  CircleAvatar(backgroundImage: NetworkImage(userImage ?? '')),
             ),
             new ListTile(
                 leading: Icon(Icons.apps),
@@ -82,10 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.blue[800],
-        centerTitle: true,
-        title: Text(userName ?? '')
-      ),
+          backgroundColor: Colors.blue[800],
+          centerTitle: true,
+          title: Text(userName ?? '')),
       body: _buildBody(context, widget.email),
     );
   }
@@ -208,25 +207,38 @@ class FirestoreListViewState extends State<FirestoreListView> {
                                               image: new NetworkImage(image))),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         width: media.size.width * .5,
                                         child: Text(
-                                          title,
+                                          name,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.w500),
                                         )),
-
                                   ],
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 5),
                                 ),
+                                Container(
+                                  width: media.size.width * .23,
+                                  height: media.size.height * .12,
+                                  alignment: FractionalOffset.center,
+                                  decoration: new BoxDecoration(
+                                      color: const Color.fromRGBO(
+                                          247, 64, 106, 1.0),
+                                      borderRadius: new BorderRadius.all(
+                                          const Radius.circular(5.0)),
+                                      image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image:
+                                              new NetworkImage(postedImage))),
+                                ),
                                 Expanded(
                                   child: Container(
-                                    padding: EdgeInsets.only(left: 10,top: 10),
+                                    padding: EdgeInsets.only(left: 10, top: 10),
                                     width: media.size.width * .5,
                                     child: Text(
                                       description,
@@ -248,7 +260,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
                               alignment: FractionalOffset.center,
                               decoration: new BoxDecoration(
                                   color:
-                                  const Color.fromRGBO(247, 64, 106, 1.0),
+                                      const Color.fromRGBO(247, 64, 106, 1.0),
                                   borderRadius: new BorderRadius.all(
                                       const Radius.circular(5.0)),
                                   image: new DecorationImage(
@@ -275,7 +287,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       IconButton(
-                                        padding: EdgeInsets.only(bottom:0),
+                                        padding: EdgeInsets.only(bottom: 0),
                                         onPressed: () {},
                                         icon: Icon(
                                           Icons.thumb_up,
@@ -291,7 +303,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       IconButton(
-                                        padding: EdgeInsets.only(bottom:0),
+                                          padding: EdgeInsets.only(bottom: 0),
                                           icon: Icon(Icons.comment,
                                               color: Colors.white),
                                           onPressed: () {}),

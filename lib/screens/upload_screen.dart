@@ -32,7 +32,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Future getImage(var imagesource) async {
     var tempImage = await ImagePicker.pickImage(source: imagesource);
-
+    print("this is data from Image $tempImage");
     setState(() {
       sampleImage = tempImage;
     });
