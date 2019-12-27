@@ -163,7 +163,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
         color: Colors.blue[100],
         child: ListView.builder(
             itemCount: widget.documents.length,
-            itemExtent: media.size.height * .2,
+            itemExtent: media.size.height * .5,
             itemBuilder: (BuildContext context, int index) {
               String title = widget.documents[index].data['title'].toString();
               String description =
@@ -173,159 +173,66 @@ class FirestoreListViewState extends State<FirestoreListView> {
               String postedImage =
                   widget.documents[index].data['postedImage'].toString();
               String name = widget.documents[index].data['username'].toString();
-              return ListTile(
-                title: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(color: Colors.cyan),
-                        color: Colors.white),
-                    padding: EdgeInsets.all(5.0),
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Stack(
-                      children: <Widget>[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Container(
-                                      width: media.size.width * .1,
-                                      height: media.size.height * .05,
-                                      alignment: FractionalOffset.center,
-                                      padding: EdgeInsets.only(left: 4),
-                                      decoration: new BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              247, 64, 106, 1.0),
-                                          borderRadius: new BorderRadius.all(
-                                              const Radius.circular(20.0)),
-                                          image: new DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: new NetworkImage(image))),
-                                    ),
-                                    Container(
-                                        padding: EdgeInsets.only(left: 15),
-                                        width: media.size.width * .5,
-                                        child: Text(
-                                          name,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                ),
-                                Container(
-                                  width: media.size.width * .23,
-                                  height: media.size.height * .12,
-                                  alignment: FractionalOffset.center,
-                                  decoration: new BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          247, 64, 106, 1.0),
-                                      borderRadius: new BorderRadius.all(
-                                          const Radius.circular(5.0)),
-                                      image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image:
-                                              new NetworkImage(postedImage))),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 10, top: 10),
-                                    width: media.size.width * .5,
-                                    child: Text(
-                                      description,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                            ),
-                            Container(
-                              width: media.size.width * .23,
-                              height: media.size.height * .12,
-                              alignment: FractionalOffset.center,
-                              decoration: new BoxDecoration(
-                                  color:
-                                      const Color.fromRGBO(247, 64, 106, 1.0),
-                                  borderRadius: new BorderRadius.all(
-                                      const Radius.circular(5.0)),
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: new NetworkImage(postedImage))),
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          left: 0.0,
-                          right: 0.0,
-                          bottom: 0.0,
-                          child: Container(
-                            height: 30.0,
-                            color: Colors.blue[800],
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "$likes",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      IconButton(
-                                        padding: EdgeInsets.only(bottom: 0),
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.thumb_up,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "${comments.length}",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      IconButton(
-                                          padding: EdgeInsets.only(bottom: 0),
-                                          icon: Icon(Icons.comment,
-                                              color: Colors.white),
-                                          onPressed: () {}),
-                                    ],
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ],
-                    )),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PostScreen(
-                            documents: widget.documents,
-                            index: index,
-                            userImage: userImage,
-                            userName: userName,
-                            userId: userId)),
-                  );
-                },
+              return Column(
+                children: <Widget>[
+
+                  Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.only(top: 10,left: 10,right: 10),
+                    child: ListTile(
+
+                      leading:CircleAvatar(
+                        radius: 23.0,
+                        backgroundImage: NetworkImage(image),
+                      ),
+                      title: Container(
+                          padding: EdgeInsets.only(left: 15),
+                          width: media.size.width * .5,
+                          child: Text(
+                            name,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500),
+                          )),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PostScreen(
+                                  documents: widget.documents,
+                                  index: index,
+                                  userImage: userImage,
+                                  userName: userName,
+                                  userId: userId)),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10,right: 10),
+                      width: media.size.width,
+                      height: 500,
+                      color: Colors.grey,
+                      child:
+                      Container(
+                        width: media.size.width * .23,
+                        height: media.size.height * .12,
+                        alignment: FractionalOffset.center,
+                        decoration: new BoxDecoration(
+                            color:
+                            const Color.fromRGBO(247, 64, 106, 1.0),
+                            borderRadius: new BorderRadius.all(
+                                const Radius.circular(5.0)),
+                            image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: new NetworkImage(postedImage))),
+                      ),
+                    ),
+                  )
+                ],
               );
             }),
       ),
