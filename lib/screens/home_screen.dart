@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/screens/post_screen.dart';
-import 'package:redditapp/screens/upload_screen.dart';
+import 'package:redditapp/widget/upload_details.dart';
 
 class HomeScreen extends StatefulWidget {
   String email;
@@ -16,9 +16,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String userName;
   String userImage;
+
   @override
   initState() {
     super.initState();
+
+    print("this is email ${widget.email}");
     Firestore.instance
         .collection('users')
         .where("email", isEqualTo: widget.email)
@@ -34,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent[200],
+      backgroundColor: Colors.grey[200],
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -122,7 +125,6 @@ class FirestoreListViewState extends State<FirestoreListView> {
   bool liked = false;
   int likes = 0;
   var userInfo;
-  // List<Comment> comments = [];
 
   @override
   initState() {
@@ -145,7 +147,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
     return Scaffold(
-      backgroundColor: Colors.blueAccent[400],
+      backgroundColor: Colors.white,
       floatingActionButton: new FloatingActionButton(
         backgroundColor: Colors.blue[800],
         onPressed: () {
@@ -160,10 +162,10 @@ class FirestoreListViewState extends State<FirestoreListView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
-        color: Colors.blue[100],
+        padding: EdgeInsets.only(left: 10, right: 10),
         child: ListView.builder(
             itemCount: widget.documents.length,
-            itemExtent: media.size.height * .5,
+            itemExtent: 320,
             itemBuilder: (BuildContext context, int index) {
               String title = widget.documents[index].data['title'].toString();
               String description =
@@ -176,7 +178,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
               return Column(
                 children: <Widget>[
                   Container(
-                    color: Colors.white,
+                    color: Colors.grey[300],
                     margin: EdgeInsets.only(top: 10, left: 10, right: 10),
                     child: ListTile(
                       leading: CircleAvatar(
@@ -210,9 +212,9 @@ class FirestoreListViewState extends State<FirestoreListView> {
                   ),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
+                      margin: EdgeInsets.only(left: 10, right: 10, bottom: 25),
                       width: media.size.width,
-                      height: 500,
+                      height: 200,
                       color: Colors.grey,
                       child: InkWell(
                         onTap: () {
@@ -224,7 +226,8 @@ class FirestoreListViewState extends State<FirestoreListView> {
                                     index: index,
                                     userImage: userImage,
                                     userName: userName,
-                                    userId: userId)),
+                                    userId: userId,
+                                    postedImage: postedImage)),
                           );
                         },
                         child: Container(

@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 150.0,
                   // color: Colors.blue[50],
                   child: Image.network(
-                     "https://carlisletheacarlisletheatre.org/images/icon-reddit-android-1.png"),
+                      "https://carlisletheacarlisletheatre.org/images/icon-reddit-android-1.png"),
                 ),
                 SizedBox(
                   height: 15.0,
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                          hintText: 'c@123.com',
+                          hintText: 's@123.com',
                           labelText: "Email",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0))),
@@ -111,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _loginPressed() {
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    var email = "c@123.com";
+    var email = _emailController.text.trim();
+    // "c@123.com";
     // _emailController.text.trim();
     RegExp exp = new RegExp(p);
     if (!exp.hasMatch(email)) {
@@ -126,7 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
       showDialog(context: context, child: dialog);
       return;
     }
-    var password = "123456";
+    var password = _passController.text;
+    // "123456";
     // _passController.text;
     if (password.length < 6) {
       AlertDialog dialog = new AlertDialog(
@@ -145,8 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
-      email: "c@123.com",
-      password: "123456",
+      email: email,
+      password: password,
     )
         .then((FirebaseUser user) {
       setState(() {
@@ -169,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       );
       showDialog(context: context, child: dialog);
-      print("error $e");
       setState(() {
         isLoading = false;
       });

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Comment extends StatelessWidget {
-  TextEditingController _textFieldController = TextEditingController();
+class Comment extends StatefulWidget {
   final String username;
   final String uid;
   final String avatarUrl;
@@ -32,6 +32,14 @@ class Comment extends StatelessWidget {
     );
   }
 
+  @override
+  _CommentState createState() => _CommentState();
+}
+
+class _CommentState extends State<Comment> {
+  TextEditingController _textFieldController = TextEditingController();
+
+  bool onliked = false;
   Future<List<Widget>> getReplies(id, context) async {
     List<Widget> replies = [];
     MediaQueryData media = MediaQuery.of(context);
@@ -43,18 +51,14 @@ class Comment extends StatelessWidget {
         .collection("replies")
         .getDocuments();
     data.documents.forEach((DocumentSnapshot doc) {
-      print(
-          "data added $uid.....${doc.data["postId"]}...${doc.data["userImage"]}");
-      if (doc.data["commentId"] == commentId) {
+      if (doc.data["commentId"] == widget.commentId) {
         replies.add(
           Row(
             children: <Widget>[
               Container(
                 color: Colors.white,
-//      margin: EdgeInsets.all(2),
-                width: media.size.width * 0.2,
-                height: media.size.height * 0.14,
-
+                width: 80,
+                height: 80,
                 child: VerticalDivider(
                   color: Colors.black,
                 ),
@@ -63,20 +67,17 @@ class Comment extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Container(
-//        alignment: Alignment.center,
                       color: Colors.white,
-//    margin: EdgeInsets.all(2),
                       width: media.size.width,
-                      height: media.size.height * 0.14,
+                      height: 80,
                       child: Column(
                         children: <Widget>[
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                width: media.size.width * 0.18,
-                                height: media.size.height * 0.08,
-//                  color: Colors.black12,
+                                width: media.size.width * 0.15,
+                                height: media.size.height * 0.05,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(color: Colors.grey),
@@ -88,24 +89,25 @@ class Comment extends StatelessWidget {
                                                 "https://carlisletheacarlisletheatre.org/images/icon-reddit-android-1.png")
                                             : new NetworkImage(
                                                 "${doc.data["userImage"]}"))),
-                                margin: EdgeInsets.only(
-                                    left: 10, right: 10, top: 10),
+                                margin: EdgeInsets.only(right: 10, top: 10),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Container(
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
-                                            "$username",
+                                            "${doc.data["username"]}",
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 18),
+                                                fontSize: 14),
                                           ),
                                         ),
                                         margin: EdgeInsets.only(
@@ -121,7 +123,7 @@ class Comment extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Colors.grey,
-                                                fontSize: 12),
+                                                fontSize: 10),
                                           ),
                                         ),
                                         margin: EdgeInsets.only(
@@ -143,7 +145,7 @@ class Comment extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 10,
                                             style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 12,
                                               color: Colors.black,
                                             ),
                                             textAlign: TextAlign.center,
@@ -164,9 +166,6 @@ class Comment extends StatelessWidget {
               )
             ],
           ),
-          // Container(
-          //   child: new Text(doc.data["reply"]),
-          // ),
         );
       }
     });
@@ -180,15 +179,16 @@ class Comment extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Container(
-                // height: 200,
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: EdgeInsets.only(left: 10),
                 alignment: FractionalOffset.center,
                 child: CircularProgressIndicator());
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: snapshot.data,
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: snapshot.data,
+            ),
           );
         });
   }
@@ -199,11 +199,8 @@ class Comment extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-//        alignment: Alignment.center,
           color: Colors.white,
-//    margin: EdgeInsets.all(2),
           width: media.size.width,
-          // height: media.size.height * 0.14,
           child: Column(
             children: <Widget>[
               Row(
@@ -212,31 +209,31 @@ class Comment extends StatelessWidget {
                   Container(
                     width: media.size.width * 0.18,
                     height: media.size.height * 0.08,
-//                  color: Colors.black12,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         border: Border.all(color: Colors.grey),
                         color: Colors.black12,
                         image: new DecorationImage(
                             fit: BoxFit.cover,
-                            image: new NetworkImage(avatarUrl))),
+                            image: new NetworkImage(widget.avatarUrl))),
                     margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
-                                "$username",
+                                "${widget.username}",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                    fontSize: 16),
                               ),
                             ),
                             margin: EdgeInsets.only(
@@ -251,7 +248,7 @@ class Comment extends StatelessWidget {
                                 "Today at 5:42PM",
                                 overflow: TextOverflow.ellipsis,
                                 style:
-                                    TextStyle(color: Colors.grey, fontSize: 17),
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                             ),
                             margin: EdgeInsets.only(
@@ -268,11 +265,11 @@ class Comment extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
-                                comment,
+                                widget.comment,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 10,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   color: Colors.black,
                                 ),
                                 textAlign: TextAlign.center,
@@ -302,19 +299,24 @@ class Comment extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.thumb_up,
-                      color: Colors.blue,
-                    ),
+                    onPressed: () {
+                      setState(() => onliked = !onliked);
+                    },
+                    icon: onliked
+                        ? Icon(
+                            Icons.thumb_up,
+                            color: Colors.blue,
+                          )
+                        : Icon(
+                            Icons.thumb_down,
+                            color: Colors.black,
+                          ),
                   ),
                 ],
               ),
               Container(
-                  // height: 200,
-                  // width: 400,
                   color: Colors.blue[100],
-                  child: buildReplies(context, postId)),
+                  child: buildReplies(context, widget.postId)),
             ],
           ),
         ),
@@ -350,24 +352,23 @@ class Comment extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  var replyName = prefs.getString('global_user') ?? '';
+                  var replyImage = prefs.getString('global_image') ?? '';
                   Firestore.instance
                       .collection("Comments")
-                      .document(postId)
+                      .document(widget.postId)
                       .collection("comments")
-                      .document(postId)
+                      .document(widget.postId)
                       .collection("replies")
                       .add({
-                    // "uid": widget.userId,
                     "reply": _textFieldController.text,
                     "timestamp": DateTime.now().toString(),
-                    // "username": widget.userName,
-                    "userImage": avatarUrl,
-                    "postId": postId,
-                    "commentId": commentId
+                    "username": replyName,
+                    "userImage": replyImage,
+                    "postId": widget.postId,
+                    "commentId": widget.commentId
                   });
-                  // setState(() {
-                  //   _controller.clear();
-                  // });
                   Navigator.of(context).pop();
                 },
               ),
