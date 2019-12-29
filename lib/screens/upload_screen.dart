@@ -51,11 +51,11 @@ class UploadScreenState extends State<UploadScreen> {
         .listen((onData) {
       setState(() {
         userId = onData.documents[0].data['uid'];
-        postId = DateTime.now().millisecondsSinceEpoch.toString() +
+        postId = Timestamp.now().millisecondsSinceEpoch.toString() +
             onData.documents[0].data['email'];
         uploaderImage = onData.documents[0].data['userImage'];
         userName = onData.documents[0].data['displayName'];
-        timeStamp = DateTime.now().toString();
+        timeStamp = Timestamp.now().toString();
       });
     });
     final StorageReference ref =

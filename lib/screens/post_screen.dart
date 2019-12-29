@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class PostScreen extends StatefulWidget {
   List<DocumentSnapshot> documents;
@@ -20,6 +21,7 @@ class _PostScreenState extends State<PostScreen> {
   String title;
   String description;
   String userName;
+
   TextEditingController _controller;
 
   @override
@@ -31,6 +33,7 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
+    var uuid = new Uuid();
 
     title = widget.documents[widget.index].data['title'].toString();
     description = widget.documents[widget.index].data['description'].toString();
@@ -148,6 +151,7 @@ class _PostScreenState extends State<PostScreen> {
                       "username": widget.userName,
                       "userImage": widget.userImage,
                       "postId": postId,
+                      "commentId": uuid.v1(),
                     });
                     setState(() {
                       _controller.clear();
@@ -199,6 +203,7 @@ class Comment extends StatelessWidget {
   final String comment;
   final String timestamp;
   final String postId;
+  final String commentId;
 
   Comment(
       {this.username,
@@ -206,16 +211,176 @@ class Comment extends StatelessWidget {
       this.avatarUrl,
       this.comment,
       this.timestamp,
-      this.postId});
+      this.postId,
+      this.commentId});
 
   factory Comment.fromDocument(DocumentSnapshot document) {
     return Comment(
-        username: document['username'],
-        uid: document['uid'],
-        comment: document["comment"],
-        timestamp: document["timestamp"],
-        avatarUrl: document["userImage"],
-        postId: document['postId']);
+      username: document['username'],
+      uid: document['uid'],
+      comment: document["comment"],
+      timestamp: document["timestamp"],
+      avatarUrl: document["userImage"],
+      postId: document['postId'],
+      commentId: document['commentId'],
+    );
+  }
+
+  Future<List<Widget>> getReplies(id, context) async {
+    List<Widget> replies = [];
+    MediaQueryData media = MediaQuery.of(context);
+    QuerySnapshot data = await Firestore.instance
+        .collection("Comments")
+        .document(id)
+        .collection("comments")
+        .document(id)
+        .collection("replies")
+        .getDocuments();
+    data.documents.forEach((DocumentSnapshot doc) {
+      print("data added $uid.....${doc.data["postId"]}.....$id");
+      if (doc.data["commentId"] == commentId) {
+        replies.add(
+          Row(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+//      margin: EdgeInsets.all(2),
+                width: media.size.width * 0.2,
+                height: media.size.height * 0.14,
+
+                child: VerticalDivider(
+                  color: Colors.black,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+//        alignment: Alignment.center,
+                      color: Colors.white,
+//    margin: EdgeInsets.all(2),
+                      width: media.size.width,
+                      height: media.size.height * 0.14,
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                width: media.size.width * 0.18,
+                                height: media.size.height * 0.08,
+//                  color: Colors.black12,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.black12,
+                                    image: new DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: new NetworkImage(
+                                            "https://carlisletheacarlisletheatre.org/images/icon-reddit-android-1.png"))),
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 10),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            "$username",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                        margin: EdgeInsets.only(
+                                          left: 10,
+                                          top: 10,
+                                        ),
+                                      ),
+                                      Container(
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            "Today at 5:42PM",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12),
+                                          ),
+                                        ),
+                                        margin: EdgeInsets.only(
+                                          left: 8,
+                                          top: 10,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Wrap(
+                                    children: <Widget>[
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(left: 10, top: 8),
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            doc.data["reply"],
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          // Container(
+          //   child: new Text(doc.data["reply"]),
+          // ),
+        );
+      }
+    });
+
+    return replies;
+  }
+
+  Widget buildReplies(context, id) {
+    return FutureBuilder<List<Widget>>(
+        future: getReplies(id, context),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Container(
+                // height: 200,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                alignment: FractionalOffset.center,
+                child: CircularProgressIndicator());
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: snapshot.data,
+          );
+        });
   }
 
   @override
@@ -228,7 +393,7 @@ class Comment extends StatelessWidget {
           color: Colors.white,
 //    margin: EdgeInsets.all(2),
           width: media.size.width,
-          height: media.size.height * 0.14,
+          // height: media.size.height * 0.14,
           child: Column(
             children: <Widget>[
               Row(
@@ -327,7 +492,12 @@ class Comment extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
+              Container(
+                  // height: 200,
+                  width: 400,
+                  color: Colors.blue[100],
+                  child: buildReplies(context, postId)),
             ],
           ),
         ),
@@ -376,6 +546,7 @@ class Comment extends StatelessWidget {
                     // "username": widget.userName,
                     // "userImage": widget.userImage,
                     "postId": postId,
+                    "commentId": commentId
                   });
                   // setState(() {
                   //   _controller.clear();
