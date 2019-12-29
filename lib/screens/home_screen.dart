@@ -122,7 +122,7 @@ class FirestoreListViewState extends State<FirestoreListView> {
   bool liked = false;
   int likes = 0;
   var userInfo;
-  List<Comment> comments = [];
+  // List<Comment> comments = [];
 
   @override
   initState() {
@@ -175,13 +175,11 @@ class FirestoreListViewState extends State<FirestoreListView> {
               String name = widget.documents[index].data['username'].toString();
               return Column(
                 children: <Widget>[
-
                   Container(
                     color: Colors.white,
-                    margin: EdgeInsets.only(top: 10,left: 10,right: 10),
+                    margin: EdgeInsets.only(top: 10, left: 10, right: 10),
                     child: ListTile(
-
-                      leading:CircleAvatar(
+                      leading: CircleAvatar(
                         radius: 23.0,
                         backgroundImage: NetworkImage(image),
                       ),
@@ -212,23 +210,35 @@ class FirestoreListViewState extends State<FirestoreListView> {
                   ),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(left: 10,right: 10),
+                      margin: EdgeInsets.only(left: 10, right: 10),
                       width: media.size.width,
                       height: 500,
                       color: Colors.grey,
-                      child:
-                      Container(
-                        width: media.size.width * .23,
-                        height: media.size.height * .12,
-                        alignment: FractionalOffset.center,
-                        decoration: new BoxDecoration(
-                            color:
-                            const Color.fromRGBO(247, 64, 106, 1.0),
-                            borderRadius: new BorderRadius.all(
-                                const Radius.circular(5.0)),
-                            image: new DecorationImage(
-                                fit: BoxFit.fill,
-                                image: new NetworkImage(postedImage))),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostScreen(
+                                    documents: widget.documents,
+                                    index: index,
+                                    userImage: userImage,
+                                    userName: userName,
+                                    userId: userId)),
+                          );
+                        },
+                        child: Container(
+                          width: media.size.width * .23,
+                          height: media.size.height * .12,
+                          alignment: FractionalOffset.center,
+                          decoration: new BoxDecoration(
+                              color: const Color.fromRGBO(247, 64, 106, 1.0),
+                              borderRadius: new BorderRadius.all(
+                                  const Radius.circular(5.0)),
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(postedImage))),
+                        ),
                       ),
                     ),
                   )

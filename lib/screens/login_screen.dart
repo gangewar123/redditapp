@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                          hintText: 'Email',
+                          hintText: 'c@123.com',
                           labelText: "Email",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0))),
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextField(
                       controller: _passController,
                       decoration: InputDecoration(
-                          hintText: 'Password',
+                          hintText: '123456',
                           labelText: "Password",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0))),
@@ -111,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _loginPressed() {
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    var email = _emailController.text.trim();
+    var email = "c@123.com";
+    // _emailController.text.trim();
     RegExp exp = new RegExp(p);
     if (!exp.hasMatch(email)) {
       AlertDialog dialog = new AlertDialog(
@@ -125,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
       showDialog(context: context, child: dialog);
       return;
     }
-    var password = _passController.text;
+    var password = "123456";
+    // _passController.text;
     if (password.length < 6) {
       AlertDialog dialog = new AlertDialog(
         title: new Text("Password is too short",
@@ -143,8 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: "c@123.com",
+      password: "123456",
     )
         .then((FirebaseUser user) {
       setState(() {

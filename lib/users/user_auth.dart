@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class UserManagement {
   storeNewUser(_displayName, _phoneNumber, user,_path, context) {
@@ -12,6 +13,9 @@ class UserManagement {
       'userImage': _path
     }).then((value) {
       Navigator.of(context).pop();
+       Container(
+                alignment: FractionalOffset.center,
+                child: CircularProgressIndicator());
       Navigator.of(context).pushReplacementNamed('/landingpage');
     }).catchError((e) {
       print(e);

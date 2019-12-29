@@ -28,6 +28,7 @@ dependencies:
   firebase_storage: ^1.0.4
   image_picker: ^0.4.12+1
   uuid: ^2.0.4
+  localstorage: ^3.0.0
 
 
 dev_dependencies:
