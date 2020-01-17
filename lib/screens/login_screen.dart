@@ -111,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _loginPressed() {
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    var email = _emailController.text.trim();
+    var email ="s@123.com";
+     _emailController.text.trim();
     // "c@123.com";
     // _emailController.text.trim();
     RegExp exp = new RegExp(p);
@@ -127,8 +128,9 @@ class _LoginScreenState extends State<LoginScreen> {
       showDialog(context: context, child: dialog);
       return;
     }
-    var password = _passController.text;
-    // "123456";
+    var password = "123456";
+    //  _passController.text;
+   
     // _passController.text;
     if (password.length < 6) {
       AlertDialog dialog = new AlertDialog(

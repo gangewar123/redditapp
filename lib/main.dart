@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redditapp/widget/reply_details.dart';
 import 'widget/upload_details.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
@@ -11,7 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Reddit_app_demo',
-        home: LoginScreen(),
+        home: Reply(),
+        // LoginScreen(),
         routes: <String, WidgetBuilder>{
           '/landingpage': (BuildContext context) => new MyApp(),
           '/signup': (BuildContext context) => new SignupScreen(),
